@@ -1,0 +1,16 @@
+import React, { Component } from 'react';
+import {Link} from "react-router-dom";
+
+import './MainContainer.css';
+
+export default class Navbar extends Component {
+  render() {
+    const linkStyle = {textDecoration: 'none', color:'inherit'}
+    return (
+      <div className="border-bottom text-center pb-2">
+        <h1><Link to="/" style={linkStyle}>Todo List </Link></h1>
+        <Link to="/about" style={linkStyle} className="text-muted">About</Link>
+      </div>
+    )
+  }
+}
