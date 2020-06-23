@@ -5,12 +5,7 @@ const TodosContext = React.createContext()
 
 class TodosProvider extends Component {
   state = {
-    todos :[
-      {
-        "id": 1,
-        "title": "delectus aut autem",
-        "completed": false
-      },], 
+    todos :null, 
     modalOpen: false,
     modalTodo: null,
     showAll: true,
@@ -21,8 +16,9 @@ class TodosProvider extends Component {
   fetchedData = null;
 
   componentDidMount() {
-    axios.get('https://jsonplaceholder.typicode.com/todos')
+    axios.get('http://localhost:8000/api/todo/')
         .then(response=>{
+          console.log(response)
           this.fetchedData = response.data
           this.setState({todos:response.data})
         })
@@ -40,7 +36,7 @@ class TodosProvider extends Component {
 
   showPendingHandler = () => {
     this.setState({
-      todos: this.fetchedData.filter(item=> item.completed === false),
+      todos: this.fetchedData ? this.fetchedData.filter(item=> item.completed === false) : null,
       showAll: false,
       showPending: true,
       showCompleted: false,
@@ -49,20 +45,29 @@ class TodosProvider extends Component {
 
   showCompletedHandler = () => {
     this.setState({
-      todos: this.fetchedData.filter(item=> item.completed === true),
+      todos: this.fetchedData ? this.fetchedData.filter(item=> item.completed === true) : null,
       showAll: false,
       showPending: false,
       showCompleted: true,
     })
   }
 
-  completedHandler = (id) => {
+   completedHandler = async (id) => {
     let tempTodos = [...this.state.todos]
     let currTodo = tempTodos.find(item => item.id === id)
-    let changedTodo = currTodo
-    changedTodo.completed = !currTodo.completed
 
-    this.setState({todos:tempTodos})
+    let response = await axios.patch('http://localhost:8000/api/todo/'+id, {"completed":!currTodo.completed});
+    response = await axios.get('http://localhost:8000/api/todo/');
+    this.fetchedData = response.data;
+
+    if(this.state.showAll){
+      this.showAllHandler();
+    }else if(this.state.showCompleted){
+      this.showCompletedHandler();
+    }else if(this.state.showPending){
+      this.showPendingHandler();
+    }
+
   }
 
   detailsHandler = id => {
@@ -73,8 +78,23 @@ class TodosProvider extends Component {
     console.log('Edit Called '+id);
   }
 
-  deleteHandler = (id) => {
-    console.log('Delete Called '+id);
+  deleteHandler = async (id) => {
+
+    let deletingTodo = this.state.todos.find(item => item.id === id);
+    alert('Are you sure you want to delete todo:"'+deletingTodo.title+'"?');
+
+    let response = await axios.delete('http://localhost:8000/api/todo/'+id);
+    response = await axios.get('http://localhost:8000/api/todo/');
+    this.fetchedData = response.data;
+
+    if(this.state.showAll){
+      this.showAllHandler();
+    }else if(this.state.showCompleted){
+      this.showCompletedHandler();
+    }else if(this.state.showPending){
+      this.showPendingHandler();
+    }
+
   }
 
   render() {

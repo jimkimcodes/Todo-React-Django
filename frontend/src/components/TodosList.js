@@ -12,7 +12,11 @@ export default class TodosList extends Component {
         <div className="row mt-4">
           <TodosConsumer>
             {(context) => {
-              return context.todos.map(item => <Todo key={item.id} item={item} />)
+              if(!context.todos){
+                return <h3 className="mx-auto">Chill man! There's nothing for you <span className="text-primary">"To Do"</span> yet!</h3>
+              }else{
+                return context.todos.map(item => <Todo key={item.id} item={item} />)
+              }
             }}
           </TodosConsumer>
         </div>

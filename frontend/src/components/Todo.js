@@ -7,7 +7,8 @@ import {ModalConsumer} from './ModalContext'
 
 export default class Todo extends Component {
   render() {
-
+    const deadline = new Date(this.props.item.deadline);
+    const delayed = deadline.getTime() < (new Date()).getTime();
     return (
       <TodoDiv className="col-12 ">
         <div className="row p-2">
@@ -25,7 +26,8 @@ export default class Todo extends Component {
                     )
                   }}
                   </ModalConsumer>
-                  <span className="ml-3">Date:30-06-2000</span>
+                  
+                  <span className="ml-3">Deadline: <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toLocaleString()}</span></span>
                   </>
                 )}}
               </TodosConsumer>
