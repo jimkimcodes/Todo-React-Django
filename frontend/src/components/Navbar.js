@@ -8,7 +8,7 @@ export default class Navbar extends Component {
     const linkStyle = {textDecoration: 'none', color:'inherit'}
     return (
       <div className="border-bottom text-center pb-2">
-        <h1><Link to="/" style={linkStyle}>Todo List by Eswar Prasad Clinton. A</Link></h1>
+        <h1><Link to="/" style={linkStyle}>Todo List</Link></h1>
         <Link to="/about" style={linkStyle} className="text-muted">Know More!</Link>
       </div>
     )

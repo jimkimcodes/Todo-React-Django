@@ -8,12 +8,16 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 body{
   background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%) no-repeat fixed center !important;
+}
+
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
 }
 
 a, a:hover {

@@ -26,7 +26,7 @@ export default class ViewModal extends Component {
                     {context.todo.description}
                   </div>
                   <div className="mt-4">
-                    <h5>Description:</h5>
+                    <h5>Deadline:</h5>
                     <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toLocaleString()}</span>
                   </div>
                 </Modal.Body>

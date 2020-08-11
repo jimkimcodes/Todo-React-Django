@@ -29,5 +29,8 @@ db.sqlite3
 myvenv/*
 __pycache__/*
 
+# main.js Bundle
+frontend/static/*
+
 #Standalone React Setup Files
 frontend_react

@@ -27,7 +27,7 @@ export default class Todo extends Component {
                   }}
                   </ModalConsumer>
                   
-                  <span className="ml-3">Deadline: <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toLocaleString()}</span></span>
+                  <span className="ml-3">Deadline: <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toString()}</span></span>
                   </>
                 )}}
               </TodosConsumer>
