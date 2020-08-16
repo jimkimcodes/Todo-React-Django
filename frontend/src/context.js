@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const TodosContext = React.createContext()
 
@@ -15,14 +16,13 @@ const getCookie = (name) => {
   if (xsrfCookies.length === 0) {
     return null;
   }
-  console.log(decodeURIComponent(xsrfCookies[0].split('=')[1]));
-  
   return decodeURIComponent(xsrfCookies[0].split('=')[1]);
 }
 
 class TodosProvider extends Component {
   state = {
-    todos :null, 
+    todos: null,
+    originalTodos: null,
     modalOpen: false,
     modalTodo: null,
     showAll: true,
@@ -30,21 +30,25 @@ class TodosProvider extends Component {
     showCompleted: false,
   }
 
-  fetchedData = null;
+  SERVER_URL = process.env.NODE_ENV == "development" ? "http://localhost:8000" : process.env.SERVER_URL;
+
+  setTodosState = async () => {
+    const response = await axios.get(`${this.SERVER_URL}/api/todo/`);
+    this.setState({
+      originalTodos: response.data,
+      todos: response.data
+    });
+  }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/todo/')
-        .then(response=>{
-          console.log(response)
-          this.fetchedData = response.data
-          this.setState({todos:response.data})
-        })
+    console.log(this.SERVER_URL);
+    this.setTodosState();
+    toast("Bonjour!💖", { className: 'text-primary' });
   }
 
   showAllHandler = () => {
-
     this.setState({
-      todos: this.fetchedData,
+      todos: this.state.originalTodos,
       showAll: true,
       showPending: false,
       showCompleted: false,
@@ -53,7 +57,7 @@ class TodosProvider extends Component {
 
   showPendingHandler = () => {
     this.setState({
-      todos: this.fetchedData ? this.fetchedData.filter(item=> item.completed === false) : null,
+      todos: this.state.originalTodos ? this.state.originalTodos.filter(item=> item.completed === false) : null,
       showAll: false,
       showPending: true,
       showCompleted: false,
@@ -62,11 +66,21 @@ class TodosProvider extends Component {
 
   showCompletedHandler = () => {
     this.setState({
-      todos: this.fetchedData ? this.fetchedData.filter(item=> item.completed === true) : null,
+      todos: this.state.originalTodos ? this.state.originalTodos.filter(item=> item.completed === true) : null,
       showAll: false,
       showPending: false,
       showCompleted: true,
     })
+  }
+
+  showTodosForMode = () => {
+    if(this.state.showAll){
+      this.showAllHandler();
+    }else if(this.state.showCompleted){
+      this.showCompletedHandler();
+    }else if(this.state.showPending){
+      this.showPendingHandler();
+    }
   }
 
   completedHandler = async (id) => {
@@ -74,46 +88,69 @@ class TodosProvider extends Component {
     let currTodo = tempTodos.find(item => item.id === id)
 
     const csrftoken = getCookie('csrftoken');
-    let response = await axios.patch('http://localhost:8000/api/todo/'+id, {"completed":!currTodo.completed}, {headers: {"X-CSRFToken": csrftoken },});
-    console.log(response)
-    response = await axios.get('http://localhost:8000/api/todo/');
-    this.fetchedData = response.data;
+    let response = await axios.patch(`${this.SERVER_URL}/api/todo/${id}`, 
+      { completed: !currTodo.completed }, 
+      { headers: {"X-CSRFToken": csrftoken },}
+    );
+    console.log(response);
 
-    if(this.state.showAll){
-      this.showAllHandler();
-    }else if(this.state.showCompleted){
-      this.showCompletedHandler();
-    }else if(this.state.showPending){
-      this.showPendingHandler();
+    await this.setTodosState();
+    let todoCompleted = response.data.completed? '✅ Completed:' : '❌ Incomplete:';
+    let toastMessage = `${todoCompleted} ${response.data.title}`;
+    if(response.status == 200){
+      toast.info(`${toastMessage}`);
+    } else {
+      toast.error('Could not update todo');
     }
-
+    this.showTodosForMode();
   }
 
-  detailsHandler = id => {
-
+  addHandler = async (todo) => {
+    const csrftoken = getCookie('csrftoken');
+    let response = await axios.post(`${this.SERVER_URL}/api/todo/`, todo,
+      { headers: {"X-CSRFToken": csrftoken },}
+    );
+    console.log(response);
+    await this.setTodosState();
+    if(response.status == 201) {
+      toast.success(`Added ${response.data.title}`);
+    } else {
+      toast.error('Could not add todo');
+    }
+    this.showTodosForMode();
   }
 
-  editHandler = (id) => {
-    console.log('Edit Called '+id);
+  editHandler = async (id, todo) => {
+    const csrftoken = getCookie('csrftoken');
+    let response = await axios.patch(`${this.SERVER_URL}/api/todo/${id}`, todo,
+      { headers: {"X-CSRFToken": csrftoken },}
+    );
+    console.log(response);
+    await this.setTodosState();
+    if(response.status = 200){
+      toast.info(`Updated ${response.data.title}`);
+    } else {
+      toast.error('Could not update todo');
+    }
+    this.showTodosForMode();
   }
+
 
   deleteHandler = async (id) => {
-
     let deletingTodo = this.state.todos.find(item => item.id === id);
-    alert('Are you sure you want to delete todo:"'+deletingTodo.title+'"?');
+    if(confirm('Are you sure you want to delete todo:"'+deletingTodo.title+'"?')) {
+      let response = await axios.delete(`${this.SERVER_URL}/api/todo/${id}`);
+      await this.setTodosState();
+      toast.error(`Deleted: ${deletingTodo.title}`);
 
-    let response = await axios.delete('http://localhost:8000/api/todo/'+id);
-    response = await axios.get('http://localhost:8000/api/todo/');
-    this.fetchedData = response.data;
-
-    if(this.state.showAll){
-      this.showAllHandler();
-    }else if(this.state.showCompleted){
-      this.showCompletedHandler();
-    }else if(this.state.showPending){
-      this.showPendingHandler();
+      if(this.state.showAll){
+        this.showAllHandler();
+      }else if(this.state.showCompleted){
+        this.showCompletedHandler();
+      }else if(this.state.showPending){
+        this.showPendingHandler();
+      }
     }
-
   }
 
   render() {
@@ -123,9 +160,10 @@ class TodosProvider extends Component {
         showAllHandler:       this.showAllHandler,
         showPendingHandler:   this.showPendingHandler,
         showCompletedHandler: this.showCompletedHandler,
-        editHandler:          this.editHandler,
         deleteHandler:        this.deleteHandler,
         completedHandler:     this.completedHandler,
+        addHandler:           this.addHandler,
+        editHandler:          this.editHandler,
       }} >
       {this.props.children}
       </TodosContext.Provider>

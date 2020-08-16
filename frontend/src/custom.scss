@@ -4,6 +4,10 @@ $theme-colors: (
   "danger": #f1285a
 );
 
+.btn {
+  font-weight: 600 !important;
+}
+
 .btn-primary {
   background-color: #58427c;
   background-image: linear-gradient(330deg, #58427c 0%, #746cc0 74%);

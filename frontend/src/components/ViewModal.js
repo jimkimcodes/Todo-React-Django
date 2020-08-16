@@ -27,7 +27,7 @@ export default class ViewModal extends Component {
                   </div>
                   <div className="mt-4">
                     <h5>Deadline:</h5>
-                    <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toLocaleString()}</span>
+                    <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toLocaleString('en-GB').slice(0, (deadline.toLocaleString('en-GB').length-3))}</span>
                   </div>
                 </Modal.Body>
                 <Modal.Footer>

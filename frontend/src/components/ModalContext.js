@@ -13,7 +13,6 @@ class ModalProvider extends Component {
     showEdit:false,
   }
 
-
   handleClose = () => this.setState({todo:null, showView:false, showEdit:false});
 
   handleShowView = (id) => this.setState({
@@ -26,12 +25,25 @@ class ModalProvider extends Component {
     showEdit:true
   });
 
-  handleAdd = () => this.setState({
+  handleShowAdd = () => this.setState({
     todo: null, 
     showEdit:true
   });
 
-  handleCompleted = this.context.completedHandler;
+  handleCompleted = (id) => { 
+    this.handleClose(); 
+    this.context.completedHandler(id); 
+  };
+
+  handleAdd = (todo) => { 
+    this.handleClose();
+    this.context.addHandler(todo);
+  };
+
+  handleEdit = (id, todo) => { 
+    this.handleClose();
+    this.context.editHandler(id, todo);
+  };
 
   render() {
     return (
@@ -40,7 +52,9 @@ class ModalProvider extends Component {
         handleClose:    this.handleClose,
         handleShowView: this.handleShowView,
         handleShowEdit: this.handleShowEdit,
+        handleShowAdd:  this.handleShowAdd,
         handleAdd:      this.handleAdd,
+        handleEdit:     this.handleEdit,
         handleCompleted: this.handleCompleted,
       }}>
         {this.props.children}

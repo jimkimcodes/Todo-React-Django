@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {Button, Modal} from 'react-bootstrap';
+import Form from './Form'
+import {Button, Modal} from 'react-bootstrap'
 import {ModalConsumer} from './ModalContext'
 
 export default class EditModal extends Component {
@@ -19,13 +20,8 @@ export default class EditModal extends Component {
                   <Modal.Title>{context.todo ? 'Edit Todo: '+context.todo.title : 'Add Todo'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  {context.todo ? context.todo.description : ''}
+                  <Form todo={context.todo} addTodo={context.handleAdd} editTodo={context.handleEdit} />
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="primary" onClick={()=>context.handleClose()}>
-                    Submit
-                  </Button>
-                </Modal.Footer>
               </Modal>
             )
           }

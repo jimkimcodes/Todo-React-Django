@@ -29,6 +29,8 @@ db.sqlite3
 myvenv/*
 __pycache__/*
 
+.env
+
 # main.js Bundle
 frontend/static/*
 

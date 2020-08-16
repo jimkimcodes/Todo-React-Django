@@ -19,15 +19,17 @@ export default class Todo extends Component {
                 return(
                   <>
                   <input type="checkbox" className="mr-3" checked={this.props.item.completed} onChange={()=>context.completedHandler(this.props.item.id)}/>
-                  <ModalConsumer>
-                  {(modalContext)=>{
-                    return(
-                      <span className={"text-capitalize h5 " + (this.props.item.completed ? "text-muted": "")} onClick={()=>modalContext.handleShowView(this.props.item.id)} style={this.props.item.completed ? {textDecoration: 'line-through'}: null}>{this.props.item.title}</span>
-                    )
-                  }}
-                  </ModalConsumer>
-                  
-                  <span className="ml-3">Deadline: <span className={delayed ? "font-weight-bold text-danger":""}>{deadline.toString()}</span></span>
+                  <div className="d-inline">
+                    <ModalConsumer>
+                    {(modalContext)=>{
+                      return(
+                        <span className={"text-capitalize h5 " + (this.props.item.completed ? "text-muted": "")} onClick={()=>modalContext.handleShowView(this.props.item.id)} style={this.props.item.completed ? {textDecoration: 'line-through'}: null}>{this.props.item.title}</span>
+                      )
+                    }}
+                    </ModalConsumer>
+                    
+                    <span className="ml-3 d-block d-md-inline">Deadline: <span className={delayed ? "font-weight-bold text-danger":""}>{ deadline.toLocaleString('en-GB').slice(0, (deadline.toLocaleString('en-GB').length-3)) }</span></span>
+                  </div>
                   </>
                 )}}
               </TodosConsumer>
