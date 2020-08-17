@@ -1,0 +1,14 @@
+{% extends 'userauth/auth.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+  <h2 class="text-primary">Log in</h2>
+  <hr>
+  <form method="post">
+  {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary mb-2">Log in</button>
+  </form>
+  <!-- <hr style="border-top: 0.5px solid rgba(0, 0, 0, 0.1);">
+  <p class="text-white text-center">Made with <i class="fa fa-heart text-danger"></i> ( and litte bit of <i class="fa fa-coffee"></i> ) by <a href="https://www.linkedin.com/in/eswar-clynn/" class="font-weight-bold" style="color: #63D8FF;">Eswar Clynn</a></p> -->
+{% endblock %}

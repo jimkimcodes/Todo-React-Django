@@ -3,14 +3,20 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
 from .tokens import account_activation_token
 
+from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import login
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode ,urlsafe_base64_decode
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 # Create your views here.
+class LoginView(AuthLoginView):
+  template_name = 'userauth/login.html'
+  next = reverse_lazy('frontend:index')
+
 def signup(request):
   if request.method == 'POST':
     form = SignUpForm(request.POST)

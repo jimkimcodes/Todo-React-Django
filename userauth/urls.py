@@ -1,10 +1,12 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, reverse_lazy
 from . import views
 from django.views.generic import TemplateView
 
 app_name = 'userauth'
 
 urlpatterns = [
+  path('login/', views.LoginView.as_view(), name='login'),
+  path('logout/', views.LogoutView.as_view(next_page=reverse_lazy('userauth:signup')), name='logout'),
   path('signup/', views.signup, name='signup'),
   path('about/', views.signup, name='about'),
   re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.account_activate, name='account_activate'),
