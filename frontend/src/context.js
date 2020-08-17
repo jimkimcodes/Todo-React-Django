@@ -21,6 +21,7 @@ const getCookie = (name) => {
 
 class TodosProvider extends Component {
   state = {
+    user: null,
     todos: null,
     originalTodos: null,
     modalOpen: false,
@@ -36,8 +37,10 @@ class TodosProvider extends Component {
     const response = await axios.get(`${this.SERVER_URL}/api/todo/`);
     this.setState({
       originalTodos: response.data,
-      todos: response.data
+      todos: response.data,
+      user: response.data[0].user,
     });
+
   }
 
   componentDidMount() {
@@ -107,7 +110,11 @@ class TodosProvider extends Component {
 
   addHandler = async (todo) => {
     const csrftoken = getCookie('csrftoken');
-    let response = await axios.post(`${this.SERVER_URL}/api/todo/`, todo,
+    const userTodo = {
+      ...todo,
+      user: this.state.user,
+    }
+    let response = await axios.post(`${this.SERVER_URL}/api/todo/`, userTodo,
       { headers: {"X-CSRFToken": csrftoken },}
     );
     console.log(response);

@@ -24,7 +24,6 @@ export default class FormComponent extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    // console.log(this.props);
     if(this.isAdder) {
       this.props.addTodo(this.state);
     } else {
