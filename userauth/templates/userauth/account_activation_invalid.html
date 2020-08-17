@@ -1,0 +1,13 @@
+{% extends 'userauth/auth.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+  <h2 class="text-primary">Account Activation Failed</h2>
+  <hr>
+  <h5>Uh oh! Seems like you followed the wrong link. <span class="text-primary">Please verify the link from your inbox!</span></h5>
+  <img src="{% static 'userauth/email_sent.svg' %}" alt="Email Sent" height="300px" class="mt-5 d-block mx-auto">
+
+  <!-- <hr style="border-top: 0.5px solid rgba(0, 0, 0, 0.1);">
+  <p class="text-white text-center">Made with <i class="fa fa-heart text-danger"></i> ( and litte bit of <i class="fa fa-coffee"></i> ) by <a href="https://www.linkedin.com/in/eswar-clynn/" class="font-weight-bold" style="color: #63D8FF;">Eswar Clynn</a></p> -->
+{% endblock %}

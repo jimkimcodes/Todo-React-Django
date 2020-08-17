@@ -21,14 +21,14 @@ export default class MainContainer extends Component {
       <div className="container main-container py-3 px-md-5">
         <Navbar />
         <Switch>
-          <Route path="/about" component={About} />
+          <Route path="/affirmation" component={About} />
           <TodosProvider>
             <ModalProvider>
               <Route path="/" component={CompWrapper} />
             </ModalProvider>
           </TodosProvider>
         </Switch>
-        {/* <ToastContainer autoClose={2300} bodyClassName="font-weight-bold" /> */}
+        <ToastContainer autoClose={2300} bodyClassName="font-weight-bold" />
       </div>
     )
   }
