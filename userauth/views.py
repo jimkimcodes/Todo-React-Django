@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
 from .tokens import account_activation_token
 
-from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView
+from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView, PasswordChangeView as AuthPasswordChangeView, PasswordResetView as AuthPasswordResetView, PasswordResetConfirmView as AuthPasswordResetConfirmView
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import login
 from django.template.loader import render_to_string
@@ -11,11 +11,17 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode ,urlsafe_base64_decode
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
 
 # Create your views here.
 class LoginView(AuthLoginView):
   template_name = 'userauth/login.html'
   next = reverse_lazy('frontend:index')
+
+class PasswordChangeView(SuccessMessageMixin, AuthPasswordChangeView):
+  template_name = 'userauth/password_change.html' 
+  success_url = '/'
+  success_message = 'Password updated successfully.'
 
 def signup(request):
   if request.method == 'POST':
@@ -28,7 +34,8 @@ def signup(request):
       subject = 'Activate your TodoEPC Account.'
       message = render_to_string('userauth/account_activation_email.html',{
         'user': user,
-        'domain': current_site.domain,
+        'protocol': request.scheme,
+        'domain': request.get_host(),
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
       })
@@ -37,6 +44,7 @@ def signup(request):
 
   else:
     form = SignUpForm()
+    print(request.get_host())
 
   return render(request, 'userauth/signup.html', {'form': form})
 
@@ -55,3 +63,15 @@ def account_activate(request, uidb64, token):
     return redirect('frontend:index')
   else:
     return render(request, 'userauth/account_activation_invalid.html')
+
+class PasswordResetView(AuthPasswordResetView):
+  template_name = 'userauth/password_reset/password_reset.html'
+  email_template_name = 'userauth/password_reset/password_reset_email.html'
+  subject_template_name = 'userauth/password_reset/password_reset_subject.txt'
+  success_url = reverse_lazy('userauth:password_reset_done')
+
+class PasswordResetConfirmView(SuccessMessageMixin, AuthPasswordResetConfirmView):
+  template_name = 'userauth/password_reset/password_reset_confirm.html'
+  post_reset_login = True
+  success_url = '/'
+  success_message = 'Password updated successfully.'

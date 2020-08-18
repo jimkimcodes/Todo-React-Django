@@ -8,6 +8,13 @@
   {% load static %}
 </head>
 <body>
+  {% if messages %}
+    <div id="messages" class="d-none">
+      {% for message in messages %}
+      <span {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</span>
+      {% endfor %}
+    </div>
+  {% endif %}
   <div id="root"></div>
   <script src="{% static 'frontend/main.js' %}"></script>
 </body>

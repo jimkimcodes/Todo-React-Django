@@ -1,7 +1,7 @@
 {% autoescape off %}
 Hi {{ user.username }},
 
-Please click on the link below to confirm your registration:
+Please click on the link below to activate your account on TodoEPC:
 
-http://{{ domain }}{% url 'userauth:account_activate' uidb64=uid token=token %}
+{{ protocol }}://{{ domain }}{% url 'userauth:account_activate' uidb64=uid token=token %}
 {% endautoescape %}

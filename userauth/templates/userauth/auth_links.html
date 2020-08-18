@@ -1,0 +1,42 @@
+<hr style="background-color: aliceblue; border-top: 0.5px solid rgba(0, 0, 0, 0.1);">
+<div class="row">
+  <div class="d-flex col">
+    {% if request.path == '/auth/signup/' %}
+      <a href="{% url 'userauth:login' %}" class="btn btn-outline-primary">Login</a>
+      <a href="{% url 'userauth:about' %}" class="btn btn-outline-dark ml-auto">About</a>
+    {% endif %}
+
+    {% if request.path == '/auth/about/' %}
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'frontend:index' %}" class="btn btn-outline-dark">Back to app!</a>
+        <a href="{% url 'userauth:password_change' %}" class="btn btn-outline-dark ml-auto">Change Password</a>
+      {% else %}
+        <a href="{% url 'userauth:login' %}" class="btn btn-outline-primary">Login</a>
+        <a href="{% url 'userauth:signup' %}" class="btn btn-outline-primary ml-auto">Sign Up</a>
+      {% endif %}
+    {% endif %}
+
+    {% if request.path == '/auth/login/' %}
+      <a href="{% url 'userauth:signup' %}" class="btn btn-outline-primary">Sign Up</a>
+      <a href="{% url 'userauth:password_reset' %}" class="btn btn-outline-dark ml-auto">Forgot Password?</a>
+    {% endif %}
+
+    {% if request.path == '/auth/activation-email-sent/' %}
+      <a href="{% url 'userauth:login' %}" class="btn btn-outline-primary">Login</a>
+      <a href="{% url 'userauth:signup' %}" class="btn btn-outline-primary ml-auto">Sign Up</a>
+    {% endif %}
+
+    {% if request.path == '/auth/password_change/' %}
+      <a href="{% url 'frontend:index' %}" class="btn btn-outline-dark">Back to app!</a>
+      <a href="{% url 'userauth:about' %}" class="btn btn-outline-dark ml-auto">About</a>
+    {% endif %}
+
+    {% if request.path == '/auth/password_reset/' or request.path == '/auth/password_reset/done/' or request.path == '/auth/password_reset_confirm/' %}
+      <a href="{% url 'userauth:login' %}" class="btn btn-outline-primary">Login</a>
+      <a href="{% url 'userauth:signup' %}" class="btn btn-outline-primary ml-2">Sign Up</a>
+      <a href="{% url 'userauth:about' %}" class="btn btn-outline-dark ml-auto">About</a>
+    {% endif %}
+      
+    
+  </div>
+</div>

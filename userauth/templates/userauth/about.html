@@ -1,0 +1,40 @@
+{% extends 'userauth/base.html' %}
+
+{% block base %}
+{% load static %}
+<div class="row">
+  <div class="col border-right border-primary bg-primary d-none d-md-block">
+    {% include 'userauth/about_col.html' %}
+  </div>
+  <div class="col">
+    <div class="mt-4 mx-4 mb-4">
+      <h2 class="text-primary">About</h2>
+      <hr>
+      <p>TodoEPC is a simple app to keep track of your todos. You get to add, edit, mark as complete/incomplete, delete your todos. But it won't stop there. It is and will continue to evlove to make your life easier everyday.</p>
+      <p>The app, in software terms, could be considered as a basic CRUD(Create-Read-Update-Delete) app. Falling under the client-server model, the client(React) makes API calls to the server(Django REST framework), fetches the todos and presents them while the server(Django REST framework) exposes API endpoints, handles the authentication, communicates with the database.</p>
+      <div class="row">
+        <div class="col">
+          <h5>Tech Stack</h5>
+          <ul>
+            <li>Django REST framework</li>
+            <li>ReactJS</li>
+            <li>Bootstrap</li>
+            <li>Axios</li>
+            <li>React Toastify</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h5>Concepts Implemeted</h5>
+          <ul>
+            <li>Django+React Integration</li>
+            <li>API Implementation</li>
+            <li>Session Authentication</li>
+            <li>Email Verification</li>
+          </ul>
+        </div>
+      </div>
+      {% include 'userauth/auth_links.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

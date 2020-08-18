@@ -43,10 +43,25 @@ class TodosProvider extends Component {
 
   }
 
+  checkMessagesToast = () => {
+    let parent = document.getElementById('messages');
+    if(parent) {
+      let children = parent.querySelectorAll('span');
+      children.forEach(item => {
+        if(item.classList.contains('success')) {
+          toast.success(item.innerText);
+        } else if(item.classList.contains('error')) {
+          toast.error(item.innerText);
+        }
+      })
+    }
+  }
+
   componentDidMount() {
     console.log(this.SERVER_URL);
     this.setTodosState();
     toast("Bonjour!💖", { className: 'text-primary' });
+    this.checkMessagesToast();
   }
 
   showAllHandler = () => {
