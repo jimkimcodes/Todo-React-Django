@@ -21,6 +21,7 @@ const getCookie = (name) => {
 
 class TodosProvider extends Component {
   state = {
+    user: null,
     todos: null,
     originalTodos: null,
     modalOpen: false,
@@ -36,14 +37,31 @@ class TodosProvider extends Component {
     const response = await axios.get(`${this.SERVER_URL}/api/todo/`);
     this.setState({
       originalTodos: response.data,
-      todos: response.data
+      todos: response.data,
+      user: response.data[0].user,
     });
+
+  }
+
+  checkMessagesToast = () => {
+    let parent = document.getElementById('messages');
+    if(parent) {
+      let children = parent.querySelectorAll('span');
+      children.forEach(item => {
+        if(item.classList.contains('success')) {
+          toast.success(item.innerText);
+        } else if(item.classList.contains('error')) {
+          toast.error(item.innerText);
+        }
+      })
+    }
   }
 
   componentDidMount() {
     console.log(this.SERVER_URL);
     this.setTodosState();
     toast("Bonjour!💖", { className: 'text-primary' });
+    this.checkMessagesToast();
   }
 
   showAllHandler = () => {
@@ -107,7 +125,11 @@ class TodosProvider extends Component {
 
   addHandler = async (todo) => {
     const csrftoken = getCookie('csrftoken');
-    let response = await axios.post(`${this.SERVER_URL}/api/todo/`, todo,
+    const userTodo = {
+      ...todo,
+      user: this.state.user,
+    }
+    let response = await axios.post(`${this.SERVER_URL}/api/todo/`, userTodo,
       { headers: {"X-CSRFToken": csrftoken },}
     );
     console.log(response);

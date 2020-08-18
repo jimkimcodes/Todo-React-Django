@@ -1,0 +1,17 @@
+{% extends 'userauth/base.html' %}
+
+{% block base %}
+{% load static %}
+<div class="row">
+  <div class="col border-right border-primary bg-primary d-none d-md-block">
+    {% include 'userauth/about_col.html' %}
+  </div>
+  <div class="col">
+    <div class="mt-4 mx-4 mb-4">
+      {% block content %}
+      {% endblock %}
+      {% include 'userauth/auth_links.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}
