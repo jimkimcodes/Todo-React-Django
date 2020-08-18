@@ -33,12 +33,16 @@ class TodosProvider extends Component {
 
   SERVER_URL = process.env.NODE_ENV == "development" ? "http://localhost:8000" : process.env.SERVER_URL;
 
+  setUser = () => {
+    let element = document.getElementById('user_id');
+    this.setState({ user: element.innerText });
+  }
+
   setTodosState = async () => {
     const response = await axios.get(`${this.SERVER_URL}/api/todo/`);
     this.setState({
       originalTodos: response.data,
       todos: response.data,
-      user: response.data[0].user,
     });
 
   }
@@ -59,6 +63,7 @@ class TodosProvider extends Component {
 
   componentDidMount() {
     console.log(this.SERVER_URL);
+    this.setUser();
     this.setTodosState();
     toast("Bonjour!💖", { className: 'text-primary' });
     this.checkMessagesToast();

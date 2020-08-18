@@ -22,4 +22,6 @@ urlpatterns = [
   path('password_reset/', views.PasswordResetView.as_view(), name='password_reset'),
   path('password_reset/done/', AuthViews.PasswordResetDoneView.as_view(template_name='userauth/password_reset/password_reset_done.html'), name='password_reset_done'),
   path('reset/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+  path('delete-account/', login_required(views.delete_user), name='delete_user'),
 ]

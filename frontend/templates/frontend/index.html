@@ -8,6 +8,7 @@
   {% load static %}
 </head>
 <body>
+  <div id="user_id" class="d-none" >{{ request.user.id }}</div>
   {% if messages %}
     <div id="messages" class="d-none">
       {% for message in messages %}

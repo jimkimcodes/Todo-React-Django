@@ -10,6 +10,7 @@
       {% if request.user.is_authenticated %}
         <a href="{% url 'frontend:index' %}" class="btn btn-outline-dark">Back to app!</a>
         <a href="{% url 'userauth:password_change' %}" class="btn btn-outline-dark ml-auto">Change Password</a>
+        <a href="{% url 'userauth:delete_user' %}" class="btn btn-outline-dark ml-auto" onclick="return confirm('Are you sure? We\'re sorry to see you go.😢')">Delete my account</a>
       {% else %}
         <a href="{% url 'userauth:login' %}" class="btn btn-outline-primary">Login</a>
         <a href="{% url 'userauth:signup' %}" class="btn btn-outline-primary ml-auto">Sign Up</a>

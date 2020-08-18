@@ -4,6 +4,7 @@ from .forms import SignUpForm
 from .tokens import account_activation_token
 
 from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView, PasswordChangeView as AuthPasswordChangeView, PasswordResetView as AuthPasswordResetView, PasswordResetConfirmView as AuthPasswordResetConfirmView
+from django.contrib.auth import logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import login
 from django.template.loader import render_to_string
@@ -75,3 +76,9 @@ class PasswordResetConfirmView(SuccessMessageMixin, AuthPasswordResetConfirmView
   post_reset_login = True
   success_url = '/'
   success_message = 'Password updated successfully.'
+
+def delete_user(request):
+  user = request.user
+  logout(request)
+  user.delete()
+  redirect('userauth:signup')
