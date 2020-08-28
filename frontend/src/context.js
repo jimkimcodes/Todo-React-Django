@@ -31,7 +31,7 @@ class TodosProvider extends Component {
     showCompleted: false,
   }
 
-  SERVER_URL = process.env.NODE_ENV == "development" ? "http://localhost:8000" : process.env.SERVER_URL;
+  SERVER_URL = window.location.origin;
 
   setUser = () => {
     let element = document.getElementById('user_id');
@@ -166,7 +166,10 @@ class TodosProvider extends Component {
   deleteHandler = async (id) => {
     let deletingTodo = this.state.todos.find(item => item.id === id);
     if(confirm('Are you sure you want to delete todo:"'+deletingTodo.title+'"?')) {
-      let response = await axios.delete(`${this.SERVER_URL}/api/todo/${id}`);
+      const csrftoken = getCookie('csrftoken');
+      let response = await axios.delete(`${this.SERVER_URL}/api/todo/${id}`,{
+        headers: {"X-CSRFToken": csrftoken },
+      });
       await this.setTodosState();
       toast.error(`Deleted: ${deletingTodo.title}`);
 
